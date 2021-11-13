@@ -1,0 +1,25 @@
+import tkinter
+import random
+WIDTH =540
+HEIGHT = 480
+BG_COLOR = "white"
+MAIN_BALL_COLOR = "blue"
+MAIN_BALL_RADIUS = 25
+BAD_COLOR = "red"
+COLORS = ["aqua","fuchsia",BAD_COLOR,"pink","yellow",BAD_COLOR,"gold","chartreuse",BAD_COLOR]
+NUM_OF_BALLS = 9
+MAX_RADIUS = 35
+MIN_RADIUS = 15
+DELAY = 8
+INIT_DX = 1
+INIT_DY = 1
+ZERO = 0
+
+class Ball():
+    def __init__(self,x,y,r,color,dx=0,dy=0):
+        self.x = x
+        self.y = y
+        self.r = r
+        self.color = color
+        self.dx = dx
+        self.dy = dy
