@@ -1,25 +1,37 @@
-import tkinter
+import pygame
 import random
-WIDTH =540
-HEIGHT = 480
-BG_COLOR = "white"
-MAIN_BALL_COLOR = "blue"
-MAIN_BALL_RADIUS = 25
-BAD_COLOR = "red"
-COLORS = ["aqua","fuchsia",BAD_COLOR,"pink","yellow",BAD_COLOR,"gold","chartreuse",BAD_COLOR]
-NUM_OF_BALLS = 9
-MAX_RADIUS = 35
-MIN_RADIUS = 15
-DELAY = 8
-INIT_DX = 1
-INIT_DY = 1
-ZERO = 0
+black = (0,0,0)
+pygame.init()
+screen = pygame.display.set_mode([800,600])
+pygame.display.set_caption("Pumpkin Exploison")
+keep_going = True
+mouseDown = False
+clock = pygame.time.Clock()
+pic = pygame.image.load("2_5-128x128.png")
+colorkey = pic.get_at((0,0))
+pic.set_colorkey(colorkey)
+sprite_list = pygame.sprite.Group()
 
-class Ball():
-    def __init__(self,x,y,r,color,dx=0,dy=0):
-        self.x = x
-        self.y = y
-        self.r = r
-        self.color = color
-        self.dx = dx
-        self.dy = dy
+class Pumpkin(pygame.sprite.Sprite):
+    pos = (0,0)
+    xvel = 1
+    yvel = 1
+    scale = 100
+    def __init__(self,pos,xvel,yvel):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pic
+        self.scale = random.randrange(10,100)
+        self.image = pygame.transform.scale(self.image,(self.scale,self.scale))
+        self.rect = self.image.get_rect()
+        self.pos = pos
+        self.rect.x = pos[0] - self.scale/2
+        self.rect.y = pos[1] - self.scale / 2
+        self.xvel = xvel
+        self.yvel = yvel
+    def update(self):
+        self.rect.x += self.xvel
+        self.rect.y += self.yvel
+        if self.rect.x <= 0 or self.rect.x > screen.get_width()-self.scale:
+            self.xvel = -self.xvel
+
+
