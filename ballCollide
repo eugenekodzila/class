@@ -63,5 +63,16 @@ def mouse_click(event):
             main_ball = Ball(event.x,event.y,MAIN_BALL_RADIUS,MAIN_BALL_COLOR,INIT_DX,INIT_DY)
             if main_ball.x > WIDTH/2:
                 main_ball.dx = -main_ball.dx
+            if main_ball.y > HEIGHT/2:
+                main_ball.dy = -main_ball.dy
+            main_ball.draw()
+        else:
+            if main_ball.dy*main_ball.dx>0:
+                main_ball.dx = -main_ball.dx
+            else:
+                main_ball.dy = -main_ball.dy
+def create_list_of_balls(number):
+    
+            
 
 
