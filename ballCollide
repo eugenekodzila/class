@@ -72,7 +72,50 @@ def mouse_click(event):
             else:
                 main_ball.dy = -main_ball.dy
 def create_list_of_balls(number):
-    
-            
+    lst = []
+    while len(lst) < number:
+        next_ball = Ball(random.choice(range(MAX_RADIUS, WIDTH - MAX_RADIUS)),
+                         random.choice(range(MAX_RADIUS, HEIGHT - MAX_RADIUS)),
+                         random.choice(range(MIN_RADIUS,MAX_RADIUS)),
+                         random.choice(COLORS))
+        is_collision = False
+        for ball in lst:
+            if next_ball.is_collision(ball):
+                is_collision = True
+                break
+        if not is_collision:
+            lst.append(next_ball)
+            next_ball.draw()
+    return lst
+def count_bad_balls(list_of_balls):
+    result = 0
+    for ball in list_of_balls:
+        if ball.color == BAD_COLOR:
+            result += 1
+    return result
+def main():
+    if "main_ball" in globals():
+        main_ball.move()
+        if len(balls) - num_of_bad_balls == 0:
+            canvas.create_text(WIDTH/2,HEIGHT/2,text="YOU WON!", font="Arial 20", fill="lime")
+            main_ball.dx = main_ball.dy = 0
+        elif main_ball.dx*main_ball.dy == 0:
+            canvas.create_text(WIDTH/2,HEIGHT/2,text="YOU LOSE!", font="Arial 20", fill="red")
+    root.after(DELAY, main)
+root = tkinter.Tk()
+root.title("Colliding Balls")
+canvas = tkinter.Canvas(root,width = WIDTH,height = HEIGHT,bg = BG_COLOR)
+canvas.pack()
+canvas.bind("<Button-1>",mouse_click)
+canvas.bind("<Button-2>",mouse_click,"+")
+canvas.bind("<Button-3>",mouse_click,"+")
+balls = create_list_of_balls(NUM_OF_BALLS)
+num_of_bad_balls = count_bad_balls(balls)
+if "main_ball" in globals():
+    del main_ball
+main()
+root.mainloop()
+
+
 
 
