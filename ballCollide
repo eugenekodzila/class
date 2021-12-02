@@ -1,84 +1,66 @@
-import pygame as pg
+import tkinter
 import random
-import math
 
-vec2, vec3 = pg.math.Vector2, pg.math.Vector3
+WIDTH = 540
+HEIGHT = 480
+BG_COLOR = "white"
+MAIN_BALL_COLOR = "blue"
+MAIN_BALL_RADIUS = 25
+BAD_COLOR = "red"
+COLORS = ["aqua","fuchsia",BAD_COLOR,"pink","yellow",BAD_COLOR,"gold","chartreuse",BAD_COLOR]
+NUM_OF_BALLS = 9
+MAX_RADIUS = 35
+MIN_RADIUS = 15
+DELAY = 8
+INIT_DX = 1
+INIT_DY = 1
+ZERO = 0
 
-RES = WIDTH, HEIGHT = 1600, 900
-NUM_STARS = 1500
-CENTER = vec2(WIDTH // 2, HEIGHT // 2)
-COLORS = 'red green blue orange purple cyan'.split()
-Z_DISTANCE = 40
-ALPHA = 120
-
-
-class Star:
-    def __init__(self, app):
-        self.screen = app.screen
-        self.pos3d = self.get_pos3d()
-        self.vel = random.uniform(0.05, 0.25)
-        self.color = random.choice(COLORS)
-        self.screen_pos = vec2(0, 0)
-        self.size = 10
-
-    def get_pos3d(self, scale_pos=35):
-        angle = random.uniform(0, 2 * math.pi)
-        radius = random.randrange(HEIGHT // scale_pos, HEIGHT) * scale_pos
-        x = radius * math.sin(angle)
-        y = radius * math.cos(angle)
-        return vec3(x, y, Z_DISTANCE)
-
-    def update(self):
-        self.pos3d.z -= self.vel
-        self.pos3d = self.get_pos3d() if self.pos3d.z < 1 else self.pos3d
-
-        self.screen_pos = vec2(self.pos3d.x, self.pos3d.y) / self.pos3d.z + CENTER
-        self.size = (Z_DISTANCE - self.pos3d.z) / (0.2 * self.pos3d.z)
-        # rotate xy
-        self.pos3d.xy = self.pos3d.xy.rotate(0.2)
-        # mouse
-        # mouse_pos = CENTER - vec2(pg.mouse.get_pos())
-        # self.screen_pos += mouse_pos
+class Ball():
+    def __init__(self,x,y,r,color,dx=0,dy=0):
+        self.x = x
+        self.y = y
+        self.r = r
+        self.color = color
+        self.dx = dx
+        self.dy = dy
 
     def draw(self):
-        s = self.size
-        if (-s < self.screen_pos.x < WIDTH + s) and (-s < self.screen_pos.y < HEIGHT + s):
-            pg.draw.rect(self.screen, self.color, (*self.screen_pos, self.size, self.size))
+        canvas.create_oval(self.x-self.r,self.y-self.r,self.x+self.r,self.y+self.r,fill=self.color,outline=self.color if self.color != BAD_COLOR else "black")
 
 
-class Starfield:
-    def __init__(self, app):
-        self.stars = [Star(app) for i in range(NUM_STARS)]
+    def hide(self):
+        canvas.create_oval(self.x - self.r, self.y - self.r, self.x + self.r, self.y + self.r, fill=BG_COLOR,outline=BG_COLOR)
 
-    def run(self):
-        [star.update() for star in self.stars]
-        self.stars.sort(key=lambda star: star.pos3d.z, reverse=True)
-        [star.draw() for star in self.stars]
+    def is_collision(self,ball):
+        a = abs(self.x + self.dx - ball.x)
+        b = abs(self.y + self.dy - ball.y)
+        return (a*a+b*b)**0.5 <= self.r + ball.r
 
+    def move(self):
+        if (self.x + self.r + self.dx >= WIDTH) or (self.x - self.r + self.dx <= ZERO):
+            self.dx = -self.dx
+        if (self.y + self.r + self.dy >= HEIGHT) or (self.y - self.r + self.dy <= ZERO):
+            self.dy = -self.dy
 
-class App:
-    def __init__(self):
-        self.screen = pg.display.set_mode(RES)
-        self.alpha_surface = pg.Surface(RES)
-        self.alpha_surface.set_alpha(ALPHA)
-        self.clock = pg.time.Clock()
-        self.starfield = Starfield(self)
+        for ball in balls:
+            if self.is_collision(ball):
+                if ball.color != BAD_COLOR:
+                    ball.hide()
+                    balls.remove(ball)
+                    self.dx = -self.dx
+                    self.dy = -self.dy
+                else:
+                    self.dx = self.dy = 0
+        self.hide()
+        self.x += self.dx
+        self.y += self.dy
+        if self.dx * self.dy != 0:
+            self.draw()
 
-    def run(self):
-        while True:
-            # self.screen.fill('black')
-            self.screen.blit(self.alpha_surface, (0, 0))
-            self.starfield.run()
-
-            pg.display.flip()
-            [exit() for i in pg.event.get() if i.type == pg.QUIT]
-            self.clock.tick(60)
-
-
-if __name__ == '__main__':
-    app = App()
-    app.run()
-
-
-
-
+def mouse_click(event):
+    global main_ball
+    if event.num == 1:
+        if "main_ball" not in globals():
+            main_ball = Ball(event.x,event.y,MAIN_BALL_RADIUS,MAIN_BALL_COLOR,INIT_DX,INIT_DY)
+            
