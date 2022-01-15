@@ -1,48 +1,80 @@
-import pygame,sys,random
-from pygame.locals import *
+import pygame as pg
+import random
+import math
 
-BOARDWIDTH = 4
-BOARDHEIGHT = 4
-TILESIZE = 80
-WINDOWWIDTH = 640
-WINDOWHEIGHT = 480
-FPS = 30
-BLANK = None
-BLACK = (0,0,0)
-WHITE = (255,255,255)
-BRIGHTBLUE = (0,50,255)
-DARKTURQUOISE = (3,54,73)
-GREEN = (0,204,0)
-BGCOLOR = DARKTURQUOISE
-TILECOLOR = GREEN
-TEXTCOLOR = WHITE
-BORDERCOLOR = BRIGHTBLUE
-BASICFONTSIZE = 20
-BUTTONCOLOR = WHITE
-BUTTONTEXTCOLOR = BLACK
-MESSAGECOLOR = WHITE
+vec2, vec3 = pg.math.Vector2, pg.math.Vector3
 
-XMARGIN = int((WINDOWWIDTH-(TILESIZE*BOARDWIDTH+(BOARDWIDTH-1)))/2)
-YMARGIN = int((WINDOWHEIGHT-(TILESIZE*BOARDHEIGHT+(BOARDHEIGHT-1)))/2)
+RES = WIDTH, HEIGHT = 1600, 900
+NUM_STARS = 1500
+CENTER = vec2(WIDTH // 2, HEIGHT // 2)
+COLORS = 'red green blue orange purple cyan'.split()
+Z_DISTANCE = 40
+ALPHA = 120
 
-UP = 'up'
-DOWN = 'down'
-LEFT = 'left'
-RIGHT = 'right'
 
-def main():
-    global FPSCLOCK,DISPLAYSURF,BASICFONT,RESET_SURF,RESET_RECT,NEW_SURF,NEW_RECT,SOLVE_SURF,SOLVE_RECT
+class Star:
+    def __init__(self, app):
+        self.screen = app.screen
+        self.pos3d = self.get_pos3d()
+        self.vel = random.uniform(0.05, 0.25)
+        self.color = random.choice(COLORS)
+        self.screen_pos = vec2(0, 0)
+        self.size = 10
 
-    pygame.init()
-    FPSCLOCK = pygame.time.Clock()
-    DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH,WINDOWHEIGHT))
-    pygame.display.set_caption("Slide Puzzle")
-    BASICFONT = pygame.font.Font('freesansbold.ttf',BASICFONTSIZE)
-    RESET_SURF, RESET_RECT = makeText('Reset',TEXTCOLOR,TILECOLOR,WINDOWWIDTH - 120, WINDOWHEIGHT - 90)
-    NEW_SURF,NEW_RECT = makeText('Reset',TEXTCOLOR,TILECOLOR,WINDOWWIDTH - 120, WINDOWHEIGHT - 60)
-    SOLVE_SURF,SOLVE_RECT = makeText('Reset',TEXTCOLOR,TILECOLOR,WINDOWWIDTH - 120, WINDOWHEIGHT - 30)
+    def get_pos3d(self, scale_pos=35):
+        angle = random.uniform(0, 2 * math.pi)
+        radius = random.randrange(HEIGHT // scale_pos, HEIGHT) * scale_pos
+        x = radius * math.sin(angle)
+        y = radius * math.cos(angle)
+        return vec3(x, y, Z_DISTANCE)
 
-    mainBoard,solutionSeq = generateNewPuzzle(80)
-    SOLVEBOARD = getStartingBoard()
-    allMoves = []
-    
+    def update(self):
+        self.pos3d.z -= self.vel
+        self.pos3d = self.get_pos3d() if self.pos3d.z < 1 else self.pos3d
+
+        self.screen_pos = vec2(self.pos3d.x, self.pos3d.y) / self.pos3d.z + CENTER
+        self.size = (Z_DISTANCE - self.pos3d.z) / (0.2 * self.pos3d.z)
+        # rotate xy
+        self.pos3d.xy = self.pos3d.xy.rotate(0.2)
+        # mouse
+        mouse_pos = CENTER - vec2(pg.mouse.get_pos())
+        self.screen_pos += mouse_pos
+
+    def draw(self):
+        s = self.size
+        if (-s < self.screen_pos.x < WIDTH + s) and (-s < self.screen_pos.y < HEIGHT + s):
+            pg.draw.rect(self.screen, self.color, (*self.screen_pos, self.size, self.size))
+
+
+class Starfield:
+    def __init__(self, app):
+        self.stars = [Star(app) for i in range(NUM_STARS)]
+
+    def run(self):
+        [star.update() for star in self.stars]
+        self.stars.sort(key=lambda star: star.pos3d.z, reverse=True)
+        [star.draw() for star in self.stars]
+
+
+class App:
+    def __init__(self):
+        self.screen = pg.display.set_mode(RES)
+        self.alpha_surface = pg.Surface(RES)
+        self.alpha_surface.set_alpha(ALPHA)
+        self.clock = pg.time.Clock()
+        self.starfield = Starfield(self)
+
+    def run(self):
+        while True:
+            # self.screen.fill('black')
+            self.screen.blit(self.alpha_surface, (0, 0))
+            self.starfield.run()
+
+            pg.display.flip()
+            [exit() for i in pg.event.get() if i.type == pg.QUIT]
+            self.clock.tick(60)
+
+
+if __name__ == '__main__':
+    app = App()
+    app.run()
