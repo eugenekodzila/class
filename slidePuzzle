@@ -1,41 +1,24 @@
-import random
-choicesComputer = ['камень','ножницы','бумага']
-print("Камень давит ножницы.Ножницы режут бумагу.Бумага накрывает камень")
-playerChoice = input("Выберите: камень,ножницы,бумага или (выйти)?")
+import pygame
+pygame.init()
+screen = pygame.display.set_mode([800,600])
+pygame.display.set_caption("КЛИКЕР 228 БЭТА")
+black = (0,0,0)
+white = (255,255,255)
+font = pygame.font.SysFont("Helvetica",24)
+keepGoing = True
+buttonImage = pygame.image.load("pngegg.png")
 
+while keepGoing:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            keepGoing = False
+    drawString = "Кликни по кнопке ниже"
+    screen.fill(black)
+    text = font.render(drawString,True,white)
+    textRect = text.get_rect()
+    textRect.centerx = screen.get_rect().centerx
+    textRect.y = 100
+    screen.blit(text,textRect)
+    screen.blit(buttonImage,(100,200))
+    pygame.display.update()
 
-while playerChoice != "выйти":
-
-    playerChoice = playerChoice.lower()
-    computerChoices = random.choice(choicesComputer)
-    print("Твой выбор "+playerChoice+" компьютер выбрал "+computerChoices+".")
-
-    if playerChoice == computerChoices:
-        print("Ничья!!!")
-    elif playerChoice == "камень":
-        if computerChoices == "ножницы":
-            
-            print("Вы победили =)")
-        else:
-            
-            print("Искусственный интелект тебя победил!")
-    elif playerChoice == "бумага":
-        if computerChoices == "камень":
-            
-            print("Вы победили =)")
-        else:
-            
-            print("Искусственный интелект тебя победил!")
-    elif playerChoice == "ножницы":
-        if computerChoices == "бумага":
-            
-            print("Вы победили =)")
-        else:
-            
-            print("Искусственный интелект тебя победил!")
-    else:
-        print("Ошибка 404...простите =/")
-    print()
-    
-   
-    playerChoice = input("Выберите: камень,ножницы,бумага или (выйти)?")
