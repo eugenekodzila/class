@@ -61,6 +61,30 @@
 			return Math.floor(Math.random() * (max-min)) + min;
 		}
 		//Игровой цикл-основной процесс в котором всё будет происходить
+		function loop() {
+			requestAnimationFrame(loop);
+			if (++count < 4) {
+				return;
+			}
+			count = 0;
+			context.clearRect(0,0,canvas.width,canvas.height);
+			snake.x += snake.dx;
+			snake.y += snake.dy;
+			if (snake.x < 0) {
+				snake.x = canvas.width - grid;
+			}
+			else if (snake.x >= canvas.width) {
+				snake.x = 0
+			}
+			if (snake.y < 0) {
+				snake.y = canvas.height - grid;
+			}
+			else if (snake.y >= canvas.height) {
+				snake.y = 0
+			}
+			snake.cells.unshift({x: snake.x, y:snake.y});
+
+		}
 	</script>
 </body>
 </html>
