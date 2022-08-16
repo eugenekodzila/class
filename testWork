@@ -1,25 +1,30 @@
-from tkinter import*
-from pytube import YouTube
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-root = Tk()
-root.geometry("400x350")
-root.title("Загрузчик видео из ЮТУБА")
+public class PlayerControllers : MonoBehaviour
+{
+    public float speed = 6.0f;
+    public float jumpValue = 8.0f;
+    public float gravity = 20.0f;
+    private Vector3 moveDirection = Vector3.zero;
 
-def downloadVideo():
-    try:
-        myVar.set("Downloading...")
-        root.update()
-        YouTube(link.get()).streams.first().download()
-        link.set("Video download successfully")
-    except Exception as e:
-        myVar.set("Mistake")
-        root.update()
-        link.set("Enter correct link")
-
-Label(root,text="Welcome to youtube\nDownloader Application",font="Consolas 15 bold").pack()
-myVar = StringVar()
-myVar.set("Введи ссылку ниже")
-Entry(root,textvariable=myVar,width=40).pack(pady=10)
-link = StringVar()
-Entry(root,textvariable=link,width=40).pack(pady=10)
-       
+    void Update()
+    {
+        // Получаем компонент CharacterController, который прикреплён
+        // к текущему GameObject
+        CharacterController controller = GetComponent<CharacterController>();
+        if (controller.isGrounded)//Проверяем стоит ли обьект на земле
+        {
+            moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            //Debug.log("Input.GetAxis = " + MoveDirection);
+            ///Преобразование координат текущего обьекта из локальных в  world space
+            moveDirection = transform.TransformDirection(moveDirection);
+            moveDirection *= speed;
+            if (Input.GetButton("Jump"))
+                moveDirection.y = jumpValue;
+        }
+        moveDirection.y -= gravity * Time.deltaTime;
+        controller.Move(moveDirection * Time.deltaTime);
+    }
+}
