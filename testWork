@@ -1,31 +1,55 @@
-# def <имя функции> ():
-#       Блок инструкций
-import random
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
+public class ObjectSpawner : MonoBehaviour
+{
+    public bool isSameDelay;
+    public bool isRandomObject;
+    public GameObject ObjectToSpawn;
+    public GameObject[] ObjectsToSpawn;
+    public float timeBeforeSpawn;
+    public float spawnDelay;
+    public float minDelay;
+    public float maxDelay;
 
-def initGame():
-    secret = "Я задумал число от 1 до 1000"
-    print(secret)
-    attempt = 0
-    inputAnswer = 0
+    void Start()
+    {
+        if (isSameDelay)
+        {
+            InvokeRepeating("Spawn", timeBeforeSpawn, spawnDelay);
+        }
+        else
+        {
+            StartCoroutine(Spawner());
+        }
+    }
 
-def playGame():
-    randomNumber = random.randint(1,1000)
-    while inputAnswer != randomNumber:
-        print("Угадай число: ", end = "")
-        inputAnswer = int(input())
-        attempt + 1
-        if inputAnswer < randomNumber:
-            print("Слишком маленькое")
-        if inputAnswer > randomNumber:
-            print("Слишком большое")
-        if inputAnswer == randomNumber:
-            print("Правильно")
+    IEnumerator Spawner()
+    {
+        yield return new WaitForSeconds(Random.Range(minDelay,maxDelay));
+        Spawn();
+    }
 
-def endGame():
-    print("Ты попробовал " + str(attempt) + " раз. ")
+    void Spawn()
+    {
+        if (!isRandomObject)
+        {
+            GameObject obj = Instantiate(ObjectToSpawn, transform.position, transform.rotation) as GameObject;
+        }
+        if (isRandomObject)
+        {
+            GameObject obj = Instantiate(ObjectsToSpawn[Random.Range(0,ObjectsToSpawn.Length)],transform.position,transform.rotation) as GameObject;
+        }
+        if (!isSameDelay)
+        {
+            StartCoroutine(Spawner());
+        }
+    }
 
-initGame()
-playGame()
-endGame()
-
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+}
