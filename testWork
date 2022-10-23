@@ -1,55 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+local Players = game:GetService("Players")
 
-public class ObjectSpawner : MonoBehaviour
-{
-    public bool isSameDelay;
-    public bool isRandomObject;
-    public GameObject ObjectToSpawn;
-    public GameObject[] ObjectsToSpawn;
-    public float timeBeforeSpawn;
-    public float spawnDelay;
-    public float minDelay;
-    public float maxDelay;
+local function onPlayerAdded(player)
+	local leaderstats = Instance.new("Folder")
+	leaderstats.Name = "leaderstats"
+	leaderstats.Parent = player
+end
 
-    void Start()
-    {
-        if (isSameDelay)
-        {
-            InvokeRepeating("Spawn", timeBeforeSpawn, spawnDelay);
-        }
-        else
-        {
-            StartCoroutine(Spawner());
-        }
-    }
-
-    IEnumerator Spawner()
-    {
-        yield return new WaitForSeconds(Random.Range(minDelay,maxDelay));
-        Spawn();
-    }
-
-    void Spawn()
-    {
-        if (!isRandomObject)
-        {
-            GameObject obj = Instantiate(ObjectToSpawn, transform.position, transform.rotation) as GameObject;
-        }
-        if (isRandomObject)
-        {
-            GameObject obj = Instantiate(ObjectsToSpawn[Random.Range(0,ObjectsToSpawn.Length)],transform.position,transform.rotation) as GameObject;
-        }
-        if (!isSameDelay)
-        {
-            StartCoroutine(Spawner());
-        }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-}
+Players.PlayerAdded:Connect(onPlayerAdded)
