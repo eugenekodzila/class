@@ -1,9 +1,23 @@
-local Players = game:GetService("Players")
+frameOne = Frame()
+frameOne.pack()
+entry = Entry(frameOne, width=20)
+entry.pack(side=LEFT)
+Button(frameOne, text='Open').pack(side=LEFT)
+Button(frameOne, text='Save').pack(side=LEFT)
 
-local function onPlayerAdded(player)
-	local leaderstats = Instance.new("Folder")
-	leaderstats.Name = "leaderstats"
-	leaderstats.Parent = player
-end
+frameTwo = Frame()
+frameTwo.pack()
+text = Text(frameTwo, width=50, height=20, wrap=NONE)
+text.pack(side=LEFT)
+scrollVertical = Scrollbar(frameTwo,command=text.yview)
+scrollVertical.pack(side=LEFT,fill=Y)
+text.config(yscrollcommand=scrollVertical.set)
 
-Players.PlayerAdded:Connect(onPlayerAdded)
+scrollHorizontal = Scrollbar(frameTwo,command=text.xview)
+scrollHorizontal.pack(side=BOTTOM,fill=X)
+text.config(xscrollcommand=scrollHorizontal.set)
+root.mainloop()
+
+# for <имя переменной - счетчик> in range(диапазон чисел):
+# тело цикла
+
