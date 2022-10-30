@@ -1,23 +1,62 @@
-frameOne = Frame()
-frameOne.pack()
-entry = Entry(frameOne, width=20)
-entry.pack(side=LEFT)
-Button(frameOne, text='Open').pack(side=LEFT)
-Button(frameOne, text='Save').pack(side=LEFT)
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+[RequireComponent(typeof(AgentMotor))]
+public class Player : MonoBehaviour
+{
+    private Camera mainCamera;
+    private AgentMotor  motor;
+    [SerializeField] private LayerMask movableMask;
 
-frameTwo = Frame()
-frameTwo.pack()
-text = Text(frameTwo, width=50, height=20, wrap=NONE)
-text.pack(side=LEFT)
-scrollVertical = Scrollbar(frameTwo,command=text.yview)
-scrollVertical.pack(side=LEFT,fill=Y)
-text.config(yscrollcommand=scrollVertical.set)
+    void Start()
+    {
+        mainCamera = Camera.main;
+        motor = GetComponent<AgentMotor>();
+    }
 
-scrollHorizontal = Scrollbar(frameTwo,command=text.xview)
-scrollHorizontal.pack(side=BOTTOM,fill=X)
-text.config(xscrollcommand=scrollHorizontal.set)
-root.mainloop()
+    
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit,100,movableMask))
+            {
+                motor.MoveToPoint(hit.point);
+            }
+        }
+    }
+}
 
-# for <имя переменной - счетчик> in range(диапазон чисел):
-# тело цикла
 
+
+
+
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.AI;
+[RequireComponent(typeof(NavMeshAgent))]
+
+public class AgentMotor : MonoBehaviour
+{
+    NavMeshAgent agent;
+
+    void Start()
+    {
+        agent = GetComponent<NavMeshAgent>();
+    }
+
+    public void MoveToPoint(Vector3 point)
+    {
+        agent.SetDestination(point);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+}
