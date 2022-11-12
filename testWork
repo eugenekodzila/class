@@ -1,62 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-[RequireComponent(typeof(AgentMotor))]
-public class Player : MonoBehaviour
-{
-    private Camera mainCamera;
-    private AgentMotor  motor;
-    [SerializeField] private LayerMask movableMask;
+def getPhoneNumber():
+    buttonVar = varButton.get()
+    if buttonVar == 0:
+        label['text'] = "+79219219211"
+    elif buttonVar == 1:
+        label['text'] = "+79113111569"
+    elif buttonVar == 2:
+        label['text'] = "+79996662233"
 
-    void Start()
-    {
-        mainCamera = Camera.main;
-        motor = GetComponent<AgentMotor>();
-    }
+frameOne = Frame()
+frameOne.pack(side=LEFT)
 
-    
-    void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit,100,movableMask))
-            {
-                motor.MoveToPoint(hit.point);
-            }
-        }
-    }
-}
+varButton = IntVar()
+varButton.set(-1)
+
+Radiobutton(frameOne,text="John",width=10,height=3,indicatoron=0,variable=varButton,value=0,command=getPhoneNumber).pack()
+Radiobutton(frameOne,text="Bill",width=10,height=3,indicatoron=0,variable=varButton,value=1,command=getPhoneNumber).pack()
+Radiobutton(frameOne,text="Mary",width=10,height=3,indicatoron=0,variable=varButton,value=2,command=getPhoneNumber).pack()
+
+label = Label(bg="white",width=20)
+label.pack(side=LEFT,fill=Y)
 
 
 
-
-
-
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.AI;
-[RequireComponent(typeof(NavMeshAgent))]
-
-public class AgentMotor : MonoBehaviour
-{
-    NavMeshAgent agent;
-
-    void Start()
-    {
-        agent = GetComponent<NavMeshAgent>();
-    }
-
-    public void MoveToPoint(Vector3 point)
-    {
-        agent.SetDestination(point);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-}
+root.mainloop()
