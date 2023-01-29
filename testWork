@@ -1,25 +1,45 @@
-def getPhoneNumber():
-    buttonVar = varButton.get()
-    if buttonVar == 0:
-        label['text'] = "+79219219211"
-    elif buttonVar == 1:
-        label['text'] = "+79113111569"
-    elif buttonVar == 2:
-        label['text'] = "+79996662233"
+def addFigure():
+    figure = Toplevel()
+    figure.title("Фигура")
+    figure.resizable(0,0)
 
-frameOne = Frame()
-frameOne.pack(side=LEFT)
+    frameOne = Frame(figure)
+    frameOne.pack(padx=10,pady=10)
+    Label(frameOne,text="x1").pack(side=LEFT)
+    x1 = Entry(frameOne,width=3)
+    x1.pack(side=LEFT)
+    Label(frameOne, text="y1").pack(side=LEFT)
+    y1 = Entry(frameOne, width=3)
+    y1.pack(side=LEFT)
 
-varButton = IntVar()
-varButton.set(-1)
+    frameTwo = Frame(figure)
+    frameTwo.pack()
+    Label(frameTwo, text="x2").pack(side=LEFT)
+    x2 = Entry(frameTwo, width=3)
+    x2.pack(side=LEFT)
+    Label(frameTwo, text="y2").pack(side=LEFT)
+    y2 = Entry(frameTwo, width=3)
+    y2.pack(side=LEFT)
 
-Radiobutton(frameOne,text="John",width=10,height=3,indicatoron=0,variable=varButton,value=0,command=getPhoneNumber).pack()
-Radiobutton(frameOne,text="Bill",width=10,height=3,indicatoron=0,variable=varButton,value=1,command=getPhoneNumber).pack()
-Radiobutton(frameOne,text="Mary",width=10,height=3,indicatoron=0,variable=varButton,value=2,command=getPhoneNumber).pack()
+    frameThree = Frame(figure)
+    frameThree.pack(padx=10,pady=10)
+    variable = IntVar()
+    variable.set(1)
+    Radiobutton(frameThree,text="Прямоугольник",variable=variable,value=1).pack(anchor=W)
+    Radiobutton(frameThree, text="Овал", variable=variable, value=0).pack(anchor=W)
 
-label = Label(bg="white",width=20)
-label.pack(side=LEFT,fill=Y)
+    def paint():
+        xOne = int(x1.get())
+        yOne = int(y1.get())
+        xTwo = int(x2.get())
+        yTwo = int(y2.get())
+        if variable.get() == 0:
+            canvas.create_oval(xOne,yOne,xTwo,yTwo,width=2)
+        elif variable.get() == 1:
+            canvas.create_rectangle(xOne,yOne,xTwo,yTwo,width=2)
+        figure.destroy()
+    Button(figure,text="Нарисовать",command=paint).pack(pady=10)
 
-
-
-root.mainloop()
+canvas = Canvas(width=300,height=300,bg='white')
+canvas.pack()
+Button(text="Добавить фигуру",command=addFigure).pack()
