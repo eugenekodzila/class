@@ -1,3 +1,5 @@
+root.title("Прям+овал")
+
 def addFigure():
     figure = Toplevel()
     figure.title("Фигура")
@@ -34,12 +36,14 @@ def addFigure():
         xTwo = int(x2.get())
         yTwo = int(y2.get())
         if variable.get() == 0:
-            canvas.create_oval(xOne,yOne,xTwo,yTwo,width=2)
+            canvas.create_oval(xOne,yOne,xTwo,yTwo,width=2,fill='yellow')
         elif variable.get() == 1:
-            canvas.create_rectangle(xOne,yOne,xTwo,yTwo,width=2)
+            canvas.create_rectangle(xOne,yOne,xTwo,yTwo,width=2,fill='red')
         figure.destroy()
     Button(figure,text="Нарисовать",command=paint).pack(pady=10)
 
 canvas = Canvas(width=300,height=300,bg='white')
 canvas.pack()
 Button(text="Добавить фигуру",command=addFigure).pack()
+
+root.mainloop()
