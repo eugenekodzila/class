@@ -1,60 +1,47 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+root.title("Прям+овал")
 
-[RequireComponent(typeof(AgentMotor))]
+def addFigure():
+    figure = Toplevel()
+    figure.title("Фигура")
+    figure.resizable(0,0)
 
-public class Enemy : MonoBehaviour
-{
-    private AgentMotor motor;
-    [SerializeField] private Interactable focus;
-    [SerializeField] private float agreRadius = 10f;
+    frameOne = Frame(figure)
+    frameOne.pack(padx=10,pady=10)
+    Label(frameOne,text="x1").pack(side=LEFT)
+    x1 = Entry(frameOne,width=3)
+    x1.pack(side=LEFT)
+    Label(frameOne, text="y1").pack(side=LEFT)
+    y1 = Entry(frameOne, width=3)
+    y1.pack(side=LEFT)
 
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, agreRadius);
-    }
+    frameTwo = Frame(figure)
+    frameTwo.pack()
+    Label(frameTwo, text="x2").pack(side=LEFT)
+    x2 = Entry(frameTwo, width=3)
+    x2.pack(side=LEFT)
+    Label(frameTwo, text="y2").pack(side=LEFT)
+    y2 = Entry(frameTwo, width=3)
+    y2.pack(side=LEFT)
 
+    frameThree = Frame(figure)
+    frameThree.pack(padx=10,pady=10)
+    variable = IntVar()
+    variable.set(1)
+    Radiobutton(frameThree,text="Прямоугольник",variable=variable,value=1).pack(anchor=W)
+    Radiobutton(frameThree, text="Овал", variable=variable, value=0).pack(anchor=W)
 
-    void Start()
-    {
-        motor = GetComponent<AgentMotor>();
-    }
+    def paint():
+        xOne = int(x1.get())
+        yOne = int(y1.get())
+        xTwo = int(x2.get())
+        yTwo = int(y2.get())
+        if variable.get() == 0:
+            canvas.create_oval(xOne,yOne,xTwo,yTwo,width=2,fill='yellow')
+        elif variable.get() == 1:
+            canvas.create_rectangle(xOne,yOne,xTwo,yTwo,width=2,fill='red')
+        figure.destroy()
+    Button(figure,text="Нарисовать",command=paint).pack(pady=10)
 
-    // Update is called once per frame
-    void Update()
-    {
-        float distance = Vector3.Distance(transform.position,Player.Instance.transform.position);
-        if (distance <= agreRadius)
-        {
-            if (focus == null)
-                SetFocus(Player.Instance.GetComponent<Interactable>());
-        }
-        else if (focus != null)
-        {
-            RemoveFocus();
-        }
-    }
-
-    private void SetFocus(Interactable newFocus)
-    {
-        if (newFocus != focus)
-        {
-            if (focus != null)
-                focus.OnDefocused();
-            focus = newFocus;
-            motor.FollowTarget(newFocus);
-        }
-        newFocus.OnFocused(transform);
-    }
-
-    private void RemoveFocus()
-    {
-        if (focus != null)
-            focus.OnDefocused();
-        focus = null;
-        motor.StopFollowingTarget();
-    }
-
-}
+canvas = Canvas(width=300,height=300,bg='white')
+canvas.pack()
+Button(text="Добавить фигуру",command=addFigure).pack()
