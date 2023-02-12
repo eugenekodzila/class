@@ -5,30 +5,27 @@ def addFigure():
     figure.title("Фигура")
     figure.resizable(0,0)
 
-    frameOne = Frame(figure)
-    frameOne.pack(padx=10,pady=10)
-    Label(frameOne,text="x1").pack(side=LEFT)
-    x1 = Entry(frameOne,width=3)
-    x1.pack(side=LEFT)
-    Label(frameOne, text="y1").pack(side=LEFT)
-    y1 = Entry(frameOne, width=3)
-    y1.pack(side=LEFT)
+    Label(figure,text="x1").grid(row=0,column=0,sticky=E)
+    x1 = Entry(figure,width=3)
+    x1.grid(row=0,column=1,pady=10,sticky=W)
+    Label(figure, text="y1").grid(row=0,column=2,sticky=E)
+    y1 = Entry(figure, width=3)
+    y1.grid(row=0,column=3,sticky=W)
 
-    frameTwo = Frame(figure)
-    frameTwo.pack()
-    Label(frameTwo, text="x2").pack(side=LEFT)
-    x2 = Entry(frameTwo, width=3)
-    x2.pack(side=LEFT)
-    Label(frameTwo, text="y2").pack(side=LEFT)
-    y2 = Entry(frameTwo, width=3)
-    y2.pack(side=LEFT)
 
-    frameThree = Frame(figure)
-    frameThree.pack(padx=10,pady=10)
+    Label(figure, text="x2").grid(row=1,column=0,sticky=E)
+    x2 = Entry(figure, width=3)
+    x2.grid(row=1,column=1,sticky=W)
+    Label(figure, text="y2").grid(row=1,column=2,sticky=E)
+    y2 = Entry(figure, width=3)
+    y2.grid(row=1,column=3,sticky=W)
+
+    Frame(figure,height=15).grid(row=2,column=0)
+
     variable = IntVar()
     variable.set(1)
-    Radiobutton(frameThree,text="Прямоугольник",variable=variable,value=1).pack(anchor=W)
-    Radiobutton(frameThree, text="Овал", variable=variable, value=0).pack(anchor=W)
+    Radiobutton(figure,text="Прямоугольник",variable=variable,value=1).grid(row=3,column=0,columnspan=4,pady=10,padx=20)
+    Radiobutton(figure, text="Овал", variable=variable, value=0).grid(row=4,column=0,columnspan=4,sticky=W,padx=20)
 
     def paint():
         xOne = int(x1.get())
@@ -40,7 +37,7 @@ def addFigure():
         elif variable.get() == 1:
             canvas.create_rectangle(xOne,yOne,xTwo,yTwo,width=2,fill='red')
         figure.destroy()
-    Button(figure,text="Нарисовать",command=paint).pack(pady=10)
+    Button(figure,text="Нарисовать",command=paint).grid(row=5,column=0,columnspan=4,pady=10)
 
 canvas = Canvas(width=300,height=300,bg='white')
 canvas.pack()
