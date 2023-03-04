@@ -1,44 +1,111 @@
-root.title("Прям+овал")
+using System;
+using System.Windows.Forms;
+using System.Drawing;
+using System.Data;
+using System.Xml;
 
-def addFigure():
-    figure = Toplevel()
-    figure.title("Фигура")
-    figure.resizable(0,0)
+class FormWithManyControls : Form
+{
+    TreeView treeView1;
+    Panel panel1;
+    CheckBox checkBox1, checkBox2;
+    RadioButton radioButton1, radioButton2;
+    ListBox listBox1;
 
-    Label(figure,text="x1").grid(row=0,column=0,sticky=E)
-    x1 = Entry(figure,width=3)
-    x1.grid(row=0,column=1,pady=10,sticky=W)
-    Label(figure, text="y1").grid(row=0,column=2,sticky=E)
-    y1 = Entry(figure, width=3)
-    y1.grid(row=0,column=3,sticky=W)
+    // Метод-конструктор нашего класса
+    public FormWithManyControls()
+    {
+        // Указываем размеры и заголовок окна
+
+        this.Text = "Форма, включающая различные элементы управления!";
+        this.Height = 800; this.Width = 900;
 
 
-    Label(figure, text="x2").grid(row=1,column=0,sticky=E)
-    x2 = Entry(figure, width=3)
-    x2.grid(row=1,column=1,sticky=W)
-    Label(figure, text="y2").grid(row=1,column=2,sticky=E)
-    y2 = Entry(figure, width=3)
-    y2.grid(row=1,column=3,sticky=W)
+        // Добавляем элемент TreeView в качестве своеобразного меню
 
-    Frame(figure,height=15).grid(row=2,column=0)
+        treeView1 = new TreeView();
+        treeView1.BackColor = Color.BurlyWood;
+        treeView1.Dock = DockStyle.Left;
+        treeView1.AfterSelect +=
+        new System.Windows.Forms.TreeViewEventHandler(treeView1_AfterSelect);
 
-    variable = IntVar()
-    variable.set(1)
-    Radiobutton(figure,text="Прямоугольник",variable=variable,value=1).grid(row=3,column=0,columnspan=4,pady=10,padx=20)
-    Radiobutton(figure, text="Овал", variable=variable, value=0).grid(row=4,column=0,columnspan=4,sticky=W,padx=20)
+        TreeNode tn = new TreeNode("Элементы");
+        tn.Expand();
 
-    def paint():
-        xOne = int(x1.get())
-        yOne = int(y1.get())
-        xTwo = int(x2.get())
-        yTwo = int(y2.get())
-        if variable.get() == 0:
-            canvas.create_oval(xOne,yOne,xTwo,yTwo,width=2,fill='yellow')
-        elif variable.get() == 1:
-            canvas.create_rectangle(xOne,yOne,xTwo,yTwo,width=2,fill='red')
-        figure.destroy()
-    Button(figure,text="Нарисовать",command=paint).grid(row=5,column=0,columnspan=4,pady=10)
+        tn.Nodes.Add(new TreeNode("[Очистить]"));
+        tn.Nodes.Add(new TreeNode("Label"));
+        tn.Nodes.Add(new TreeNode("Button"));
+        tn.Nodes.Add(new TreeNode("CheckBox"));
+        tn.Nodes.Add(new TreeNode("RadioButton"));
+        tn.Nodes.Add(new TreeNode("ListBox"));
+        tn.Nodes.Add(new TreeNode("TextBox"));
+        tn.Nodes.Add(new TreeNode("TabControl"));
+        tn.Nodes.Add(new TreeNode("DataGridView"));
+        tn.Nodes.Add(new TreeNode("MainMenu"));
+        tn.Nodes.Add(new TreeNode("ToolBar"));
+        tn.Nodes.Add(new TreeNode("PictureBox"));
+        tn.Nodes.Add(new TreeNode("RichTextBox"));
 
-canvas = Canvas(width=300,height=300,bg='white')
-canvas.pack()
-Button(text="Добавить фигуру",command=addFigure).pack()
+        treeView1.Nodes.Add(tn);
+
+        this.Controls.Add(treeView1);
+
+        // Добавляем панель для размещения остальных элементов управления
+
+        panel1 = new Panel();
+        panel1.Dock = DockStyle.Right;
+        panel1.BorderStyle = BorderStyle.Fixed3D;
+        panel1.Width = this.Width - treeView1.Width;
+
+        this.Controls.Add(panel1);
+    }
+
+    // Обработчик событий, срабатывающий при выборе одного из узлов дерева TreeView
+    private void treeView1_AfterSelect
+    (object sender, System.Windows.Forms.TreeViewEventArgs e)
+    {
+        // Выполнение соответствующего действия при выборе любого из узлов
+
+        if (e.Node.Text == "[Очистить]")
+        {
+            // Удаляем с панели все элементы управления
+            panel1.Controls.Clear();
+        }
+        else if (e.Node.Text == "Button")
+        {
+            // Добавляем на панель кнопку
+
+            Button button1 = new Button();
+            button1.Text = "Нажми меня!";
+            button1.Location = new Point(300, 20);
+            button1.Width = 120;
+            button1.Height = 40;
+            button1.Click += new EventHandler(button1_Click);
+
+            panel1.Controls.Add(button1);
+        }
+        else if (e.Node.Text == "Label")
+        {
+            // Добавляем на панель метку
+
+            Label label1 = new Label();
+            label1.Text =
+            "Это метка. Используется для вывода текста на экран!";
+            
+            label1.Location = new Point(180, 70);
+            label1.Width = 400;
+            label1.Click += new EventHandler(label1_Click);
+
+            panel1.Controls.Add(label1);
+        }
+        else if (e.Node.Text == "CheckBox")
+        {
+            // Добавляем на панель несколько флажков
+
+            checkBox1 = new CheckBox();
+            checkBox1.Text = "Я способный!";
+            checkBox1.Location = new Point(20, 40);
+            checkBox1.Width = 150;
+            checkBox1.CheckedChanged +=
+            new EventHandler(CheckBox_CheckedChanged);
+            panel1.Controls.Add(checkBox1);
