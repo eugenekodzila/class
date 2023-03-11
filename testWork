@@ -1,63 +1,204 @@
-# # ########################################
-# def deleteText():
-#     answer = messageBox.askokcancel("Удаление текста","Реально удалить?")
-#     if answer:
-#         text.delete(1.0,END)
-#
-# def insertText():
-#     fileName = fileDialog.askopenfilename()
-#     try:
-#         newFile = open(fileName)
-#     except (FileNotFoundError,TypeError):
-#         messageBox.showinfo("Открытие файла","Файл не выбран!")
-#     else:
-#         something = newFile.read()
-#         text.insert(1.0,something)
-#         newFile.close()
-#
-# def extractText():
-#     fileName = fileDialog.asksaveasfilename(filetypes=(("TXT files", "*.txt"),
-#                                                        ("HTML files", "*.html"),
-#                                                        ("ALL files", "*.*")))
-#     try:
-#
-#         newFile = open(fileName,'w')
-#     except (FileNotFoundError,TypeError):
-#         messageBox.showinfo("Сохранение файла","Файл не сохранён!")
-#     else:
-#         something = text.get(1.0,END)
-#         newFile.write(something)
-#         newFile.close()
-#
-# text = Text(width=50,height=25)
-# text.grid(columnspan=2)
-# buttonOne = Button(text="Open",command=insertText)
-# buttonOne.grid(row=1,sticky=E)
-# buttonTwo = Button(text="Save",command=extractText)
-# buttonTwo.grid(row=1,column=1,sticky=W)
-# buttonThree = Button(text="Очистить",command=deleteText)
-# buttonThree.grid(column=1,sticky=E)
+using System;
+using System.Windows.Forms;
+using System.Drawing;
+using System.Data;
+using System.Xml;
 
-#####################
-# menu
-#####################
-# mainmenu = Menu(root)
-# root.config(menu=mainmenu)
-# filemenu = Menu(mainmenu,tearoff=0)
-# filemenu.add_command(label='Открыть')
-# filemenu.add_command(label='Новый')
-# filemenu.add_command(label='Сохранить')
-# filemenu.add_separator()
-# filemenu.add_command(label='Выход')
-#
-# helpmenu=Menu(mainmenu,tearoff=0)
-# helpmenuTwo = Menu(helpmenu,tearoff=0)
-# helpmenuTwo.add_command(label='Локальная справка')
-# helpmenuTwo.add_command(label='На сайте')
-#
-# helpmenu.add_cascade(label='Помощь',menu=helpmenuTwo)
-# helpmenu.add_command(label='О программе')
-#
-# mainmenu.add_cascade(label="File",menu=filemenu)
-# mainmenu.add_cascade(label='ABOUT',menu=helpmenu)
-#####################
+class FormWithManyControls : Form
+{
+    TreeView treeView1;
+    Panel panel1;
+    CheckBox checkBox1, checkBox2;
+    RadioButton radioButton1, radioButton2;
+    ListBox listBox1;
+
+    // Метод-конструктор нашего класса
+    public FormWithManyControls()
+    {
+        // Указываем размеры и заголовок окна
+
+        this.Text = "Форма, включающая различные элементы управления!";
+        this.Height = 800; this.Width = 900;
+
+
+        // Добавляем элемент TreeView в качестве своеобразного меню
+
+        treeView1 = new TreeView();
+        treeView1.BackColor = Color.BurlyWood;
+        treeView1.Dock = DockStyle.Left;
+        treeView1.AfterSelect +=
+        new System.Windows.Forms.TreeViewEventHandler(treeView1_AfterSelect);
+
+        TreeNode tn = new TreeNode("Элементы");
+        tn.Expand();
+
+        tn.Nodes.Add(new TreeNode("[Очистить]"));
+        tn.Nodes.Add(new TreeNode("Label"));
+        tn.Nodes.Add(new TreeNode("Button"));
+        tn.Nodes.Add(new TreeNode("CheckBox"));
+        tn.Nodes.Add(new TreeNode("RadioButton"));
+        tn.Nodes.Add(new TreeNode("ListBox"));
+        tn.Nodes.Add(new TreeNode("TextBox"));
+        tn.Nodes.Add(new TreeNode("TabControl"));
+        tn.Nodes.Add(new TreeNode("DataGridView"));
+        tn.Nodes.Add(new TreeNode("MainMenu"));
+        tn.Nodes.Add(new TreeNode("ToolBar"));
+        tn.Nodes.Add(new TreeNode("PictureBox"));
+        tn.Nodes.Add(new TreeNode("RichTextBox"));
+
+        treeView1.Nodes.Add(tn);
+
+        this.Controls.Add(treeView1);
+
+        // Добавляем панель для размещения остальных элементов управления
+
+        panel1 = new Panel();
+        panel1.Dock = DockStyle.Right;
+        panel1.BorderStyle = BorderStyle.Fixed3D;
+        panel1.Width = this.Width - treeView1.Width;
+
+        this.Controls.Add(panel1);
+    }
+
+    // Обработчик событий, срабатывающий при выборе одного из узлов дерева TreeView
+    private void treeView1_AfterSelect
+    (object sender, System.Windows.Forms.TreeViewEventArgs e)
+    {
+        // Выполнение соответствующего действия при выборе любого из узлов
+
+        if (e.Node.Text == "[Очистить]")
+        {
+            // Удаляем с панели все элементы управления
+            panel1.Controls.Clear();
+        }
+        else if (e.Node.Text == "Button")
+        {
+            // Добавляем на панель кнопку
+
+            Button button1 = new Button();
+            button1.Text = "Нажми меня!";
+            button1.Location = new Point(300, 20);
+            button1.Width = 120;
+            button1.Height = 40;
+            button1.Click += new EventHandler(button1_Click);
+
+            panel1.Controls.Add(button1);
+        }
+        else if (e.Node.Text == "Label")
+        {
+            // Добавляем на панель метку
+
+            Label label1 = new Label();
+            label1.Text =
+            "Это метка. Используется для вывода текста на экран!";
+            
+            label1.Location = new Point(180, 70);
+            label1.Width = 400;
+            label1.Click += new EventHandler(label1_Click);
+
+            panel1.Controls.Add(label1);
+        }
+        else if (e.Node.Text == "CheckBox")
+        {
+            // Добавляем на панель несколько флажков
+
+            checkBox1 = new CheckBox();
+            checkBox1.Text = "Я способный!";
+            checkBox1.Location = new Point(20, 40);
+            checkBox1.Width = 150;
+            checkBox1.CheckedChanged +=
+            new EventHandler(CheckBox_CheckedChanged);
+            panel1.Controls.Add(checkBox1);
+
+            checkBox2 = new CheckBox();
+            checkBox2.Text = "Я скромный!";
+            checkBox2.Location = new Point(20, 80);
+            checkBox2.Width = 150;
+            checkBox2.CheckedChanged +=
+            new EventHandler(CheckBox_CheckedChanged);
+            panel1.Controls.Add(checkBox2);
+        }
+        else if (e.Node.Text == "RadioButton")
+        {
+            // Добавляем на панель несколько переключателей
+
+            radioButton1 = new RadioButton();
+            radioButton1.Text = "Я добрый!";
+            radioButton1.Location = new Point(20, 120);
+            radioButton1.Width = 150;
+            radioButton1.Height = 30;
+            //radioButton1.Size = new Size(20, 100);
+
+            radioButton1.CheckedChanged +=
+            new EventHandler(RadioButton_CheckedChanged);
+
+            panel1.Controls.Add(radioButton1);
+
+            radioButton2 = new RadioButton();
+            radioButton2.Text = "Я трудолюбивый!";
+            radioButton2.Location = new Point(20, 160);
+            radioButton2.Width = 150;
+            radioButton2.Height = 30;
+            //radioButton2.Size = new Size(20, 100);
+
+            radioButton2.CheckedChanged +=
+            new EventHandler(RadioButton_CheckedChanged);
+
+            panel1.Controls.Add(radioButton2);
+        }
+        else if (e.Node.Text == "ListBox")
+        {
+            // Добавляем на панель список
+
+            listBox1 = new ListBox();
+            listBox1.Items.Add("Зеленый");
+            listBox1.Items.Add("Желтый");
+            listBox1.Items.Add("Голубой");
+            listBox1.Items.Add("Серый");
+            
+            listBox1.Location = new Point(20, 250);
+            listBox1.Width = 100; listBox1.Height = 100;
+            listBox1.SelectedIndexChanged +=
+            new EventHandler(listBox1_SelectedIndexChanged);
+
+            panel1.Controls.Add(listBox1);
+        }
+        else if (e.Node.Text == "TextBox")
+        {
+            // Добавляем на панель текстовое поле
+
+            TextBox textBox1 = new TextBox();
+            textBox1.Multiline = true;
+            textBox1.Text = "Это текстовое окно. Сюда можно вводить текст!" +
+                "\r\n" + " Сотрите этот текст и введите свой!";
+            textBox1.Location = new Point(180, 100);
+            textBox1.Width = 400; textBox1.Height = 40;
+
+            panel1.Controls.Add(textBox1);
+        }
+        else if (e.Node.Text == "DataGridView")
+        {
+            // Добавляем на панель таблицу, заполненную данными из файла xml
+
+            DataSet dataSet1 = new DataSet("Пример DataSet");
+            dataSet1.ReadXml("..//..//images//marks.xml");
+
+            DataGridView dataGridView1 = new DataGridView();
+            dataGridView1.Width = 250;
+            dataGridView1.Height = 150;
+            dataGridView1.Location = new Point(20, 500);
+            dataGridView1.AutoGenerateColumns = true;
+            dataGridView1.DataSource = dataSet1;
+            dataGridView1.DataMember = "предметы";
+            //dataGridView1.DataMember = "оценка";
+
+            //dataGridView1.ColumnCount = 2;
+            panel1.Controls.Add(dataGridView1);
+
+        }
+        else if (e.Node.Text == "TabControl")
+        {
+
+        }
+    }
+}
