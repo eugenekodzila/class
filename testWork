@@ -2,44 +2,63 @@ using System;
 using System.Windows.Forms;
 using System.Drawing;
 
-class PictureFlipper: Form
+class PictureFlipper : Form
 {
-    Button buttonOne;
-    Bitmap imageOne;
-    PictureBox pictureBoxOne;
+    Button button1;
+    Bitmap image1;
+    PictureBox pictureBox1;
 
+    // Метод-конструктор нашего класса
     public PictureFlipper()
     {
+        // Указываем размеры и заголовок окна
+
         this.Text = "Поворот рисунка";
-        this.Size = new Size(302,240);
+        this.Size = new Size(302, 240);
 
-        buttonOne = new Button();
-        buttonOne.Text = "Поворот рисунка";
-        buttonOne.Location = new Point(100,150);
-        buttonOne.Size = new Size(70,40); 
-        buttonOne.Click += new System.EventHandler(buttonOneCLick);
-        this.Controls.Add(buttonOne);
+        // Добавляем на форму кнопку
 
-        pictureBoxOne = new PictureBox();
-        pictureBoxOne.SizeMode = PictureBoxSizeMode.StretchImage;
-        pictureBoxOne.BorderStyle = BorderStyle.Fixed3D;
-        pictureBoxOne.ClientSize = new Size(300,196);
+        button1 = new Button();
+        button1.Text = "Поворот рисунка";
+        button1.Location = new Point(100, 150);
+        button1.Size = new Size(70, 40);
+        button1.Click += new System.EventHandler(button1_Click);
+        this.Controls.Add(button1);
 
-        imageOne = new Bitmap("../../images/Giraf.jpg");
-        pictureBoxOne.Image = (Image)imageOne;
+        // Добавляем элемент PictureBox на форму
 
-        this.Controls.Add(pictureBoxOne);   
+        pictureBox1 = new PictureBox();
+        pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+        pictureBox1.BorderStyle = BorderStyle.Fixed3D;
+        pictureBox1.ClientSize = new Size(300, 196);
+
+        // Добавляем изображение в элемент PictureBox
+
+        image1 = new Bitmap(@"../../images/Giraf.jpg");
+        pictureBox1.Image = (Image)image1;
+
+        // Добавляем на форму элемент PictureBox  
+
+        this.Controls.Add(pictureBox1);
 
     }
-     static void Main()
-        {
-            Application.Run(new PictureFlipper());
-        }
 
-        void buttonOneCLick(object sender, EventArgs e)
-        {
-            imageOne.RotateFlip(RotateFlipType.RotateNoneFlipX);
-            pictureBoxOne.Image = (Image)imageOne;
-            this.Text = "Рисунок после поворота!!!!";
-        }
+    static void Main()
+    {
+        // Создаем и запускаем форму 
+        Application.Run(new PictureFlipper());
+    }
+
+    // Обработчик события, срабатывающий при нажатии кнопки
+    void button1_Click(object sender, EventArgs e)
+    {
+        // Flip the image along the X axis (horizontally)
+        image1.RotateFlip(RotateFlipType.RotateNoneFlipX);
+
+        // Повторно вставляем изображение в элемент PictureBox
+        pictureBox1.Image = (Image)image1;
+
+        // Обновляем заголовок окна
+        this.Text = "Рисунок после поворота!";
+    }
 }
