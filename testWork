@@ -1,64 +1,44 @@
-using System;
-using System.Windows.Forms;
-using System.Drawing;
+import turtle
+t = turtle.Turtle()
+screen = turtle.Screen()
+h = screen.window_height()
+w = screen.window_width()
+def third_of_egg():
+    for count, y in enumerate(range(y1, y2, -1)):
+        length = (((((3*w)//16)**2)*(((3*h)//8)**2)
+                   - (y**2)*(((3*w)//16)**2))/(((3*h)//8)**2))**(1/2)
+        t.penup()
+        x = -length
+        t.sety(y)
+        t.goto(x, y)
+        t.pendown()
+        t.forward(2 * length)
+        t.color([color1[i] + col_change * (count) for i, \
+            col_change in enumerate(color_change)])
 
-class PictureFlipper : Form
-{
-    Button button1;
-    Bitmap image1;
-    PictureBox pictureBox1;
-
-    // Метод-конструктор нашего класса
-    public PictureFlipper()
-    {
-        // Указываем размеры и заголовок окна
-
-        this.Text = "Поворот рисунка";
-        this.Size = new Size(302, 240);
-
-        // Добавляем на форму кнопку
-
-        button1 = new Button();
-        button1.Text = "Поворот рисунка";
-        button1.Location = new Point(100, 150);
-        button1.Size = new Size(70, 40);
-        button1.Click += new System.EventHandler(button1_Click);
-        this.Controls.Add(button1);
-
-        // Добавляем элемент PictureBox на форму
-
-        pictureBox1 = new PictureBox();
-        pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
-        pictureBox1.BorderStyle = BorderStyle.Fixed3D;
-        pictureBox1.ClientSize = new Size(300, 196);
-
-        // Добавляем изображение в элемент PictureBox
-
-        image1 = new Bitmap(@"../../images/Giraf.jpg");
-        pictureBox1.Image = (Image)image1;
-
-        // Добавляем на форму элемент PictureBox  
-
-        this.Controls.Add(pictureBox1);
-
-    }
-
-    static void Main()
-    {
-        // Создаем и запускаем форму 
-        Application.Run(new PictureFlipper());
-    }
-
-    // Обработчик события, срабатывающий при нажатии кнопки
-    void button1_Click(object sender, EventArgs e)
-    {
-        // Flip the image along the X axis (horizontally)
-        image1.RotateFlip(RotateFlipType.RotateNoneFlipX);
-
-        // Повторно вставляем изображение в элемент PictureBox
-        pictureBox1.Image = (Image)image1;
-
-        // Обновляем заголовок окна
-        this.Text = "Рисунок после поворота!";
-    }
-}
+color1 = (1, 0, 0)
+color2 = (0, 1, 0)
+t.color(color1)
+color_change = [(col - color1[i]) / (h / 4) for i, \
+    col in enumerate(color2)]
+y1 = h//2 - h//8
+y2 = h//8
+third_of_egg()
+color1 = (0, 1, 0)
+color2 = (0, 0, 1)
+t.color(color1)
+color_change = [(col - color1[i]) / (h / 4) for i,
+                                            col in enumerate(color2)]
+y1 = h//8
+y2 = -h//8
+third_of_egg()
+color1 = (0, 0, 1)
+color2 = (1, 1, 0)
+t.color(color1)
+color_change = [(col - color1[i]) / (h / 4) for i,
+                                            col in enumerate(color2)]
+y1 = -h//8
+y2 = -h//2 + h//8
+third_of_egg()
+t.hideturtle()
+screen.exitonclick()
