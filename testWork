@@ -1,44 +1,54 @@
-import turtle
-t = turtle.Turtle()
-screen = turtle.Screen()
-h = screen.window_height()
-w = screen.window_width()
-def third_of_egg():
-    for count, y in enumerate(range(y1, y2, -1)):
-        length = (((((3*w)//16)**2)*(((3*h)//8)**2)
-                   - (y**2)*(((3*w)//16)**2))/(((3*h)//8)**2))**(1/2)
-        t.penup()
-        x = -length
-        t.sety(y)
-        t.goto(x, y)
-        t.pendown()
-        t.forward(2 * length)
-        t.color([color1[i] + col_change * (count) for i, \
-            col_change in enumerate(color_change)])
+using System;
+using System.Windows.Forms;
+using System.Drawing;
 
-color1 = (1, 0, 0)
-color2 = (0, 1, 0)
-t.color(color1)
-color_change = [(col - color1[i]) / (h / 4) for i, \
-    col in enumerate(color2)]
-y1 = h//2 - h//8
-y2 = h//8
-third_of_egg()
-color1 = (0, 1, 0)
-color2 = (0, 0, 1)
-t.color(color1)
-color_change = [(col - color1[i]) / (h / 4) for i,
-                                            col in enumerate(color2)]
-y1 = h//8
-y2 = -h//8
-third_of_egg()
-color1 = (0, 0, 1)
-color2 = (1, 1, 0)
-t.color(color1)
-color_change = [(col - color1[i]) / (h / 4) for i,
-                                            col in enumerate(color2)]
-y1 = -h//8
-y2 = -h//2 + h//8
-third_of_egg()
-t.hideturtle()
-screen.exitonclick()
+
+
+class FunWithTheMouse: Form
+{
+    PictureBox pictureBoxOne;
+    Label labelOne;
+    Point spotClicked;
+
+    public FunWithTheMouse()
+    {
+        this.Size = new Size(640,480);
+        pictureBoxOne = new PictureBox();
+        pictureBoxOne.Image = (Image)new Bitmap(@"../../images/Dog.bmp");
+        pictureBoxOne.SizeMode = PictureBoxSizeMode.Normal;
+        pictureBoxOne.Dock = DockStyle.Fill;
+        this.Controls.Add(pictureBoxOne);
+
+        labelOne = new Label();
+        labelOne.BackColor = Color.Wheat;
+        labelOne.Dock = DockStyle.Bottom;
+        labelOne.Text = 
+        "При нажатой левой кнопке мыши можно рисовать прямоугольники"+
+        "Нажатая правая кнопка изменяет яркость прмоугольника"+
+        "Нажав SHIFT и перемещая мышь рисуем желтые кружки ";
+        labelOne.TextAlign = ContentAligment.MiddleCenter;
+        this.Controls.Add(labelOne);
+
+        this.pictureBoxOne.MouseDown += new MouseEventHandler(MouseButtonIsDown);
+        this.pictureBoxOne.MouseUp += new MouseEventHandler(MouseButtonIsUp);
+        this.pictureBoxOne.MouseMove += new MouseEventHandler(MouseMoved);
+
+    }
+
+    public void MouseMoved(object sender, MouseEventArgs e)
+    {
+        if((Control.ModifierKeys & Keys.Shift)==Keys.Shift)
+        {
+            System.Drawing.Graphics g = this.pictureBoxOne.CreateGraphics();
+            System.Drawing.Pen yellowPen = new System.Drawing.Pen(Color.Yellow, 3);
+
+            g.DrawEllipse(yellowPen,e.X,e.Y,40,40);
+            g.Dispose();
+        }
+    }
+    public void MouseButtonIsDown(object sender, MouseEventArgs e)
+    {
+        spotClicked.X = e.X;
+        spotClicked.Y = e.Y;
+    }
+}
