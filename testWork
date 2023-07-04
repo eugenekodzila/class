@@ -1,98 +1,65 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
 
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+import pygame
+import sys
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+WIN_WIDTH = 800
+WIN_HEIGHT = 600
+WHITE = (255,255,255)
+BLACK = (0,0,0)
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+class Rocket:
+    widthRocket = 20
+    heightRocket = 50
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </TableLayout>
+    def __init__(self,surface,color):
+        self.surf = surface
+        self.color = color
+        self.x = surface.get_width()//2-Rocket.widthRocket//2
+        self.y = surface.get_height()
+    def fly(self):
+        pygame.draw.rect(
+            self.surf,self.color,(self.x,self.y,
+            Rocket.widthRocket,Rocket.heightRocket))
+        self.y -= 3
+        if self.y < -Rocket.heightRocket:
+            self.y = WIN_HEIGHT
 
-    <FrameLayout
-        android:id="@+id/frameLayout"
-        android:layout_width="match_parent"
-        android:layout_height="135dp"
-        tools:layout_editor_absoluteX = "8dp"
-        tools:layout_editor_absoluteY = "8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-        
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="125dp"
-            android:layout_height="125dp"
-            android:layout_gravity="center"
-            tools:srcCompat="@tools:sample/avatars" />
+screen = pygame.display.set_mode((WIN_WIDTH,WIN_HEIGHT))
+rectLeft = pygame.Rect((0,0),(WIN_WIDTH//2,WIN_HEIGHT))
+rectRight = pygame.Rect((WIN_WIDTH//2,0),(WIN_WIDTH//2,WIN_HEIGHT))
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:srcCompat="@tools:sample/backgrounds/scenic" />
-    </FrameLayout>
+surfLeft = pygame.Surface((rectLeft.width,rectLeft.height))
+surfLeft.fill=(WHITE)
+surfRight = pygame.Surface((rectRight.width,rectRight.height))
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="0dp"
-        android:layout_height="80dp"
-        android:orientation="vertical"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frameLayout"
-        >
+screen.blit(surfLeft,rectLeft)
+screen.blit(surfRight,rectRight)
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Name:"
-            android:textSize="20sp"/>
+rocketLeft = Rocket(surfLeft,BLACK)
+rocketRight = Rocket(surfRight,WHITE)
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Age:"
-            android:textSize="20sp"/>
+pygame.display.update()
+activeLeft = False
+activeRight = False
 
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Hobby:"
-            android:textSize="20sp"/>
 
-    </LinearLayout>
+while 1 :
+    for i in pygame.event.get():
+        if i.type == pygame.QUIT:
+            sys.exit()
+        elif i.type == pygame.MOUSEBUTTONUP:
+            if rectLeft.collidepoint(i.pos):
+                activeLeft = True
+                activeRight = False
+            elif rectRight.collidepoint(i.pos):
+                activeRight = True
+                activeRight = False
 
-    <LinearLayout
-        android:layout_width="409dp"
-        android:layout_height="729dp"
-        android:orientation="horizontal"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="1dp">
 
-    </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
