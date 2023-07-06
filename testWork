@@ -1,65 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
 
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-import pygame
-import sys
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-WIN_WIDTH = 800
-WIN_HEIGHT = 600
-WHITE = (255,255,255)
-BLACK = (0,0,0)
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-class Rocket:
-    widthRocket = 20
-    heightRocket = 50
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-    def __init__(self,surface,color):
-        self.surf = surface
-        self.color = color
-        self.x = surface.get_width()//2-Rocket.widthRocket//2
-        self.y = surface.get_height()
-    def fly(self):
-        pygame.draw.rect(
-            self.surf,self.color,(self.x,self.y,
-            Rocket.widthRocket,Rocket.heightRocket))
-        self.y -= 3
-        if self.y < -Rocket.heightRocket:
-            self.y = WIN_HEIGHT
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </TableLayout>
 
-screen = pygame.display.set_mode((WIN_WIDTH,WIN_HEIGHT))
-rectLeft = pygame.Rect((0,0),(WIN_WIDTH//2,WIN_HEIGHT))
-rectRight = pygame.Rect((WIN_WIDTH//2,0),(WIN_WIDTH//2,WIN_HEIGHT))
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="135dp"
+        tools:layout_editor_absoluteX = "8dp"
+        tools:layout_editor_absoluteY = "8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="125dp"
+            android:layout_height="125dp"
+            android:layout_gravity="center"
+            tools:srcCompat="@tools:sample/avatars" />
 
-surfLeft = pygame.Surface((rectLeft.width,rectLeft.height))
-surfLeft.fill=(WHITE)
-surfRight = pygame.Surface((rectRight.width,rectRight.height))
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+    </FrameLayout>
 
-screen.blit(surfLeft,rectLeft)
-screen.blit(surfRight,rectRight)
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:orientation="vertical"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout"
+        >
 
-rocketLeft = Rocket(surfLeft,BLACK)
-rocketRight = Rocket(surfRight,WHITE)
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Name:"
+            android:textSize="20sp"/>
 
-pygame.display.update()
-activeLeft = False
-activeRight = False
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Age:"
+            android:textSize="20sp"/>
 
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hobby:"
+            android:textSize="20sp"/>
 
-while 1 :
-    for i in pygame.event.get():
-        if i.type == pygame.QUIT:
-            sys.exit()
-        elif i.type == pygame.MOUSEBUTTONUP:
-            if rectLeft.collidepoint(i.pos):
-                activeLeft = True
-                activeRight = False
-            elif rectRight.collidepoint(i.pos):
-                activeRight = True
-                activeRight = False
+    </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:orientation="horizontal"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        >
 
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Photo"
+            android:textSize="18sp"
+            android:gravity="center"
+            />
 
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Projects"
+            android:textSize="18sp"
+            android:gravity="center"/>
 
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Achievements"
+            android:textSize="18sp"
+            android:gravity="center"/>
 
+    </LinearLayout>
 
+    <androidx.gridlayout.widget.GridLayout
+        android:id="@+id/gridLayout"
+        android:layout_width="match_parent"
+        android:layout_height="250dp">
 
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:srcCompat="@tools:sample/avatars" />
 
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <ImageView
+            android:id="@+id/imageView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:srcCompat="@tools:sample/avatars" />
+    </androidx.gridlayout.widget.GridLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
