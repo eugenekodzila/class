@@ -1,3 +1,5 @@
+##### TETRISSSSSSSSS
+
 import pygame as pg
 import random,time,sys
 from pygame.locals import*
@@ -120,3 +122,69 @@ def pauseScreen():
     pause = pg.Surface((600,500),pg.SRCALPHA)
     pause.fill((0,0,255,127))
     displaySurf.blit(pause,(0,0))
+
+def main():
+    global fpsClock,displaySurf,basicFont,bigFont
+    pg.init()
+    fpsClock = pg.time.Clock()
+    displaySurf = pg.display.set_mode((windowWidth,windowHeight))
+    basicFont = pg.font.SysFont('arial',20)
+    bigFont = pg.font.SysFont('verdana',45)
+    pg.display.set_caption('Tetris lite')
+    showText('Tetris lite')
+
+    while True:
+        runTetris()
+        pauseScreen()
+        showText('Game Over')
+
+def runTetris():
+    cup = emptyCup()
+    lastMoveDown = time.time()
+    lastSideMove = time.time()
+    lastFall = time.time()
+    goingDown = False
+    goingLeft = False
+    goingRight = False
+    points = 0
+    level, fallSpeed = calcSpeed(points)
+    fallingFig = getNewFig()
+    nextFig = getNewFig()
+
+    while True:
+        if fallingFig == None:
+            fallingFig = nextFig
+            nextFig = getNewFig()
+            lastFall = time.time()
+
+            if not checkPos(cup,fallingFig):
+                return
+        quitGame()
+
+        for event in pg.event.get():
+            if event.type == KEYUP:
+                if event.key == K_SPACE:
+                    pauseScreen()
+                    showText('PAUSE')
+                    lastFall = time.time()
+                    lastMoveDown = time.time()
+                    lastSideMove = time.time()
+                elif event.key == K_LEFT:
+                    goingLeft = False
+                elif event.key == K_RIGHT:
+                    goingRight = False
+                elif event.key == K_DOWN:
+                    goingDown = False
+            elif event.type == KEYDOWN:
+                if event.key == K_LEFT and checkPos(cup,fallingFig,adjX=-1):
+                    fallingFig['x'] -=1
+                    goingLeft = True
+                    goingRight = False
+                    lastSideMove = time.time()
+                elif event.key == K_RIGHT and checkPos(cup,fallingFig,adjX=1):
+                    fallingFig['x'] += 1
+                    goingLeft = False
+                    goingRight = True
+                    lastSideMove = time.time()
+                elif event.key == K_UP:
+                    fallingFig['rotation'] = (fallingFig['rotation']+1) % len(figures[fallingFig['shape']])
