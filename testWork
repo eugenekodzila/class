@@ -1,69 +1,22 @@
-<!DOCTYPE html>
+function videoAct() {//Запускаем или ставим на паузу видео
+		if(videoPlayer.paused){
+			videoPlayer.play();
+			actionButton.setAttribute('class','video-hud_element video-hud_action video-hud_action_play');
+		}else{
+			videoPlayer.pause();
+			actionButton.setAttribute('class','video-hud_element video-hud_action video-hud_action_pause');
+		}
+		if(durationTime.innerHTML == '00:00') {
+			durationTime.innerHTML = videoTime(videoPlayer.duration);
+		}
+		//Запуск и пауза
+	actionButton.addEventListener('click',videoAct);
+	videoPlayer.addEventListener('click',videoAct);
+	}
 
-<html >
-<head>
-	<title>Hello Roma!!!</title>
-</head>
-<body>
-	<h1>Основной заголовок</h1>
-	<h2>Заголовок 2-го уровня</h2>
-	<h3>Заголовок 3-го уровня</h3>
-	<h4>Заголовок 4-го уровня</h4>
-	<h5>Заголовок 5-го уровня</h5>
-	<h6>Заголовок 6-го уровня</h6>
+function videoTime(time){ //Рассчитываем время в секундах и минутах
+	time = Math.floor(time);
+	var minutes = Math.floor(time/60);
+	var seconds = Math.floor(time - minutes * 60);
 
-	<p>Абзац состоит из одного или нескольких
-	предложений, формирующих самодостаточную часть
-	какого-либо высказывания. Абзац начинается 
-	с красной строки.</p>
-	<p>Текст, разделенный на части, легче понимать.
-	Например текст книги может быть разделен на главы.
-	В главах могут быть подзаголовки. Под каждым из подзаголовков
-	будет следовать текст, состоящий из одного или нескольких абзацев.</p>
-	<p>Вот так можно вывести текст с 
-		<b>полужирным</b> начертанием шрифта.</p>
-	<p>В аннотации основные характеристики какого-либо продукта
-		могут быть выделены <b>полужирным</b> начертанием шрифта.</p>
-
-		<p>Венера - единственная планета, вращающаяся по часовой стрелке. </p>
-		<hr />
-		<p>Юпитер больше, чем все остальные планеты вместе взятые.</p>
-
-		<address>
-			<p>
-				<a href="mailto:kodzila@mail.ru">
-					kodzila@mail.ru
-				</a>
-			</p>
-			<p>г. Мурманск, проспект Ленина 100</p>
-			
-		</address>
-
-		<p>
-				 Обзоры кинофильмов:
-				 <ul>
-				 	<li>
-				 		<a href="http://www.kinopoisk.ru">Кинопоиск</a>
-				 	</li>
-				 	<li>
-				 		<a href="http://www.megacritic.ru">Мегакритик</a>
-				 	</li>
-				 	<li>
-				 		<a href="http://www.kinoblog.org">Киноблог</a>
-				 	</li>
-				 	<li>
-				 		<a href="http://www.televesti.ru">Телевести.ру</a>
-				 	</li>
-				 </ul>
-			</p>
-<a href="classwork.html">На главную</a>
-
-			<p>
-				<ul>
-					<li>
-						
-					</li>
-				</ul>
-			</p>
-</body>
-</html>
+}
