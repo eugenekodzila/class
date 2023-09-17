@@ -1,67 +1,69 @@
 <!DOCTYPE html>
-<html>
+
+<html >
 <head>
-	<meta charset="utf-8">
-	<title>Video player DIY</title>
+	<title>Hello Roma!!!</title>
 </head>
 <body>
+	<h1>Основной заголовок</h1>
+	<h2>Заголовок 2-го уровня</h2>
+	<h3>Заголовок 3-го уровня</h3>
+	<h4>Заголовок 4-го уровня</h4>
+	<h5>Заголовок 5-го уровня</h5>
+	<h6>Заголовок 6-го уровня</h6>
 
-	<div class = "video-container">
-		<video src="video.mp4" poster = "preview.jpg" class='video-player' id='video-player' preload="metadata"></video>
-		<div class = "video-hud">
-			<div class = "video-hud_element video-hud_action video-hud_action_play" id='video-hud_action'></div>
-			<div class = "video-hud_element video-hud_curr-time" id='video-hud_curr-time'>00:00</div>
-			<progress value="0" max="100" class="video-hud_element video-hud_progress-bar" id='video-hud_progress-bar'>
-			<div class='video-hud_element video-hud_duration' id='video-hud_duration'>00:00</div>
-			<div class='video-hud_element video-hud_mute video-hud_mute_false' id='video-hud_mute'></div>
-			<input type="range" value="100" max='100' title="Громкость" class="video-hud_element video-hud_volume" id='video-hud_volume'>
-			<select title="Скорость" class="video-hud_element video-hud_speed" id='video-hud_speed'>
-				<option value="25">x0.25</option>
-				<option value="50">x0.50</option>
-				<option value="75">x0.75</option>
-				<option value="100" selected>x1.00</option>
-				<option value="125">x1.25</option>
-				<option value="150">x1.50</option>
-				<option value="175">x1.75</option>
-				<option value="200">x2.00</option>
-			</select>
-			<a class='video-hud_element video-hud_download' title="Скачать" href="video.mp4" download></a>
-		</div>
-	</div>
+	<p>Абзац состоит из одного или нескольких
+	предложений, формирующих самодостаточную часть
+	какого-либо высказывания. Абзац начинается 
+	с красной строки.</p>
+	<p>Текст, разделенный на части, легче понимать.
+	Например текст книги может быть разделен на главы.
+	В главах могут быть подзаголовки. Под каждым из подзаголовков
+	будет следовать текст, состоящий из одного или нескольких абзацев.</p>
+	<p>Вот так можно вывести текст с 
+		<b>полужирным</b> начертанием шрифта.</p>
+	<p>В аннотации основные характеристики какого-либо продукта
+		могут быть выделены <b>полужирным</b> начертанием шрифта.</p>
 
-	<style type="text/css">
-		.video-container {
-		background:#000;
-		width:80%;
-		color:#fff;
-	}
+		<p>Венера - единственная планета, вращающаяся по часовой стрелке. </p>
+		<hr />
+		<p>Юпитер больше, чем все остальные планеты вместе взятые.</p>
 
-	.video-player {
-		width:100%;
-		margin:0;
-	}
+		<address>
+			<p>
+				<a href="mailto:kodzila@mail.ru">
+					kodzila@mail.ru
+				</a>
+			</p>
+			<p>г. Мурманск, проспект Ленина 100</p>
+			
+		</address>
 
-	.video-hud {
-		margin: 0;
-		padding: 1px;
-	}
+		<p>
+				 Обзоры кинофильмов:
+				 <ul>
+				 	<li>
+				 		<a href="http://www.kinopoisk.ru">Кинопоиск</a>
+				 	</li>
+				 	<li>
+				 		<a href="http://www.megacritic.ru">Мегакритик</a>
+				 	</li>
+				 	<li>
+				 		<a href="http://www.kinoblog.org">Киноблог</a>
+				 	</li>
+				 	<li>
+				 		<a href="http://www.televesti.ru">Телевести.ру</a>
+				 	</li>
+				 </ul>
+			</p>
+<a href="classwork.html">На главную</a>
 
-	.video-hud_element {
-		cursor: pointer;
-		display: inline-block;
-		vertical-align: middle;
-		height: 30px;
-	}
-
-	.video-hud_action {
-		width: 30px;
-	}
-
-	.video-hud_action_play {
-		background: #ccc;
-		border: radius:0 100px 100px 0;
-	}
-	</style>
-
+			<p>
+				<ul>
+					<li>
+						
+					</li>
+				</ul>
+			</p>
 </body>
 </html>
