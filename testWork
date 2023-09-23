@@ -1,4 +1,106 @@
-function videoAct() {//Запускаем или ставим на паузу видео
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Video player DIY</title>
+</head>
+<body>
+
+	<div class = "video-container">
+		<video src="video.mp4" poster = "preview.jpg" class='video-player' id='video-player' preload="metadata"></video>
+		<div class = "video-hud">
+			<div class = "video-hud_element video-hud_action video-hud_action_play" id='video-hud_action'></div>
+			<div class = "video-hud_element video-hud_curr-time" id='video-hud_curr-time'>00:00</div>
+			<progress value="0" max="100" class="video-hud_element video-hud_progress-bar" id='video-hud_progress-bar'>
+			<div class='video-hud_element video-hud_duration' id='video-hud_duration'>00:00</div>
+			<div class='video-hud_element video-hud_mute video-hud_mute_false' id='video-hud_mute'></div>
+			<input type="range" value="100" max='100' title="Громкость" class="video-hud_element video-hud_volume" id='video-hud_volume'>
+			<select title="Скорость" class="video-hud_element video-hud_speed" id='video-hud_speed'>
+				<option value="25">x0.25</option>
+				<option value="50">x0.50</option>
+				<option value="75">x0.75</option>
+				<option value="100" selected>x1.00</option>
+				<option value="125">x1.25</option>
+				<option value="150">x1.50</option>
+				<option value="175">x1.75</option>
+				<option value="200">x2.00</option>
+			</select>
+			<a class='video-hud_element video-hud_download' title="Скачать" href="video.mp4" download></a>
+		</div>
+	</div>
+
+	<style type="text/css">
+		.video-container {
+		background:#000;
+		width:80%;
+		color:#fff;
+	}
+
+	.video-player {
+		width:100%;
+		margin:0;
+	}
+
+	.video-hud {
+		margin: 0;
+		padding: 1px;
+	}
+
+	.video-hud_element {
+		cursor: pointer;
+		display: inline-block;
+		vertical-align: middle;
+		height: 30px;
+	}
+
+	.video-hud_action {
+		width: 30px;
+	}
+
+	.video-hud_action_play {
+		background: #ccc;
+		border: radius:0 100px 100px 0;
+	}
+
+	.video-hud_action_pause {
+		background: #c00;
+	}
+
+	.video-hud_mute {
+		width: 30px;
+		border-radius: 100px 100px 100px 100px;
+	}
+
+	.video-hud_mute_true {
+		background: #c00;
+	}
+
+	.video-hud_mute_false {
+		background: #ccc;
+	}
+
+	.video-hud_download {
+		background: #ccc;
+		width: 30px;
+		border-radius: 0 0 100px 100px;
+	}
+
+	</style>
+
+<script type="text/javascript">
+	//Получаем обьекты
+	//Плэер
+	var videoPlayer = document.getElementById('video-player');
+	//Время
+	var progressBar = document.getElementById('video-hud_progress-bar');
+	var currTime = document.getElementById('video-hud_curr-time');
+	var durationTime = document.getElementById('video-hud_duration');
+	//Кнопки
+	var actionButton = document.getElementById('video-hud_action');
+	var muteButton = document.getElementById('video-hud_mute');
+	var volumeScale = document.getElementById('video-hud_volume');
+	var speedSelect = document.getElementById('video-hud_speed');
+	function videoAct() {//Запускаем или ставим на паузу видео
 		if(videoPlayer.paused){
 			videoPlayer.play();
 			actionButton.setAttribute('class','video-hud_element video-hud_action video-hud_action_play');
@@ -18,5 +120,44 @@ function videoTime(time){ //Рассчитываем время в секунд�
 	time = Math.floor(time);
 	var minutes = Math.floor(time/60);
 	var seconds = Math.floor(time - minutes * 60);
-
+	var minutesVal = minutes;
+	var secondsVal = seconds;
+	if(minutes < 10){
+		minutesVal = '0'+ seconds;
+	}
+	return minutesVal + ':' secondsVal;
 }
+
+function videoProgress() { //Отображаем время воспроизведения
+progress = (Math.floor(videoPlayer.currentTime)/(Math.floor(videoPlayer.duration)/100));
+progressBar.value = progress;
+currTime.innerHTML = videoTime(videoPlayer.currentTime);
+}
+
+function videoChangeTime(e) {//Перематываем
+	var mouseX = Math.floor(e.pageX - progressBar.offsetLeft);
+	var progress = mouseX/(progressBar.offsetWidth/100);
+	videoPlayer.currentTime = videoPlayer.duration*(progress/100);
+}
+
+// Отображение времени
+videoPlayer.addEventListener('timeupdate',videoProgress);
+// Перемотка
+progressBar.addEventListener('click',videoChangeTime);
+
+
+function videoChangeVolume() { //Меняем громкость
+	var volume = volumeScale.value/100;
+	videoPlayer.volume = volume;
+	if(videoPlayer.volume == 0){
+		muteButton.setAttribute('class','video-hud_element video-hud_mute video-hud_mute_true');
+	}else{
+		muteButton.setAttribute('class','video-hud_element video-hud_mute video-hud_mute_false');
+	}
+}
+
+</script>
+	
+
+</body>
+</html>
